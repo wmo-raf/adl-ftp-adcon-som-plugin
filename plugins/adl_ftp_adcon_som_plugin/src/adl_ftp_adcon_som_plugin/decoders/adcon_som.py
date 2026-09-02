@@ -16,9 +16,9 @@ class AdconSOMDecoder(FTPDecoder):
     compat_type = "adcon_som"
     display_name = "ADCON FTP Somalia"
     
-    def get_matching_files(self, station_link, files):
+    def get_matching_files(self, station_link, files, start_date=None, end_date=None):
         # get all the initial matching files
-        matching_files = super().get_matching_files(station_link, files)
+        matching_files = super().get_matching_files(station_link, files, start_date, end_date)
         
         # get the dates we need to check
         dates = get_dates_to_now(date_granularity=station_link.date_granularity,
@@ -62,7 +62,7 @@ class AdconSOMDecoder(FTPDecoder):
         # date format like 24/02/2025 Time format like 00:15:00
         date_time_str = df["Date"].astype(str) + df["Time"].astype(str)
         
-        df["TIMESTAMP"] = pd.to_datetime(date_time_str, format="%d/%m/%Y%H:%M:%S")
+        df["observation_time"] = pd.to_datetime(date_time_str, format="%d/%m/%Y%H:%M:%S")
         
         # drop the date and time columns
         df.drop(columns=["Date", "Time", "Time zone"], inplace=True)
