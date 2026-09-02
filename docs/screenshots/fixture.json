@@ -1,0 +1,93 @@
+{
+  "capture": {
+    "connection": "ADCON FTP Somalia (mock source)",
+    "ingest": true,
+    "probe": true,
+    "station_checks": [
+      "DEMO001"
+    ],
+    "wait": 240
+  },
+  "connection": {
+    "model": "adl_ftp_plugin.NetworkFTP",
+    "fields": {
+      "name": "ADCON FTP Somalia (mock source)",
+      "plugin": "adl_ftp_plugin",
+      "stations_timezone": "Africa/Mogadishu",
+      "plugin_processing_interval": 1,
+      "connection_type": "ftp",
+      "host": "$ENV:ADCON_SOM_FTP_HOST|mock_ftp",
+      "port": "$ENV:ADCON_SOM_FTP_PORT|21",
+      "username": "$ENV:ADCON_SOM_FTP_USER|demo",
+      "password": "$ENV:ADCON_SOM_FTP_PASSWORD|demo",
+      "passive_mode": true,
+      "timeout": 20,
+      "decoder": "adcon_som"
+    },
+    "children": {
+      "variable_mappings": [
+        {
+          "adl_parameter": "Air Temperature",
+          "file_variable_name": "Temperature",
+          "file_variable_unit": "degC"
+        },
+        {
+          "adl_parameter": "Relative Humidity",
+          "file_variable_name": "Relative Humidity",
+          "file_variable_unit": "percent"
+        },
+        {
+          "adl_parameter": "Atmospheric Pressure",
+          "file_variable_name": "Barometric Pressure",
+          "file_variable_unit": "hPa"
+        },
+        {
+          "adl_parameter": "Precipitation",
+          "file_variable_name": "Precipitation",
+          "file_variable_unit": "mm"
+        },
+        {
+          "adl_parameter": "Wind Speed",
+          "file_variable_name": "Wind Speed",
+          "file_variable_unit": "m/s"
+        },
+        {
+          "adl_parameter": "Wind Direction",
+          "file_variable_name": "Wind Direction",
+          "file_variable_unit": "degree"
+        },
+        {
+          "adl_parameter": "Solar Radiation",
+          "file_variable_name": "Global Radiation",
+          "file_variable_unit": "W/m^2"
+        }
+      ]
+    }
+  },
+  "station_links": [
+    {
+      "model": "adl_ftp_plugin.FTPStationLink",
+      "station": "DEMO001",
+      "fields": {
+        "ftp_path": "$ENV:ADCON_SOM_FTP_PATH|/adcon-som",
+        "file_pattern": "516877-*.csv",
+        "listing_strategy": "pattern_only",
+        "date_granularity": "day",
+        "start_date": "$NOW-1d",
+        "skip_already_downloaded_files": false
+      }
+    },
+    {
+      "model": "adl_ftp_plugin.FTPStationLink",
+      "station": "DEMO002",
+      "fields": {
+        "ftp_path": "$ENV:ADCON_SOM_FTP_PATH|/adcon-som",
+        "file_pattern": "516878-*.csv",
+        "listing_strategy": "pattern_only",
+        "date_granularity": "day",
+        "start_date": "$NOW-1d",
+        "skip_already_downloaded_files": false
+      }
+    }
+  ]
+}
